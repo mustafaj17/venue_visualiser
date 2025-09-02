@@ -1,0 +1,81 @@
+{
+  "tasks": [
+    {
+      "title": "[OPS] Create DB in Vercel",
+      "description": "Create a new Postgres database in Vercel, link to app via env vars",
+      "assignee": "",
+      "status": "todo",
+      "type": "ops"
+    },
+    {
+      "title": "[OPS] Enable Clerk Organizations & Roles",
+      "description": "Enable Organizations in Clerk Dashboard, create roles (`admin`, `member`), configure JWT/session claims.",
+      "assignee": "",
+      "status": "todo",
+      "type": "ops"
+    },
+    {
+      "title": "[OPS] Configure Clerk keys per environment",
+      "description": "Set Clerk publishable/secret keys in env vars, enable Email/Password sign-in.",
+      "assignee": "",
+      "status": "todo",
+      "type": "ops"
+    },
+    {
+      "title": "[BE] Auth & RBAC middleware (Clerk-only)",
+      "description": "Validate Clerk session/JWT, read org role, enforce `requireAuth` and `requireAdmin`.",
+      "assignee": "",
+      "status": "todo",
+      "type": "backend"
+    },
+    {
+      "title": "[FE] Auth screens via Clerk",
+      "description": "Implement login, register, and forgot password flows using Clerk UI components.",
+      "assignee": "",
+      "status": "todo",
+      "type": "frontend"
+    },
+    {
+      "title": "[FE] Role-aware routing & layouts",
+      "description": "Gate `/admin/*` with Clerk role checks, render layouts based on role.",
+      "assignee": "",
+      "status": "todo",
+      "type": "frontend"
+    },
+    {
+      "title": "[BE] Admin Users API (proxy to Clerk)",
+      "description": "Endpoints to list users from Clerk and update their org roles.",
+      "assignee": "",
+      "status": "todo",
+      "type": "backend"
+    },
+    {
+      "title": "[FE] Admin Dashboard: Users table",
+      "description": "Admin UI showing users list, promote/demote actions via API.",
+      "assignee": "",
+      "status": "todo",
+      "type": "frontend"
+    },
+    {
+      "title": "[FE] User Profile mini-panel",
+      "description": "Display email, provider, and role from Clerk session.",
+      "assignee": "",
+      "status": "todo",
+      "type": "frontend"
+    },
+    {
+      "title": "[OPS] Seed initial Admin in Clerk",
+      "description": "Create initial Organization admin in Clerk Dashboard.",
+      "assignee": "",
+      "status": "todo",
+      "type": "ops"
+    },
+    {
+      "title": "[QA] E2E test plan (no local DB)",
+      "description": "Test login, signup, role-aware routing, and admin role changes through Clerk.",
+      "assignee": "",
+      "status": "todo",
+      "type": "qa"
+    }
+  ]
+}
