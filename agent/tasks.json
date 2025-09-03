@@ -76,6 +76,90 @@
       "assignee": "",
       "status": "todo",
       "type": "qa"
+    },
+    {
+      "title": "DB: Create 'items' and 'assets' tables",
+      "description": "Create the database tables. The 'items' table needs columns for id, name, description, and a user_id foreign key. The 'assets' table needs to link items to their thumbnail file paths in GCP.",
+      "area": "Backend",
+      "status": "To Do",
+      "assignedTo": null
+    },
+    {
+      "title": "API: Implement CRUD endpoints for Items",
+      "description": "Build the RESTful API endpoints for Create, Read (a single item), Update, and Delete operations on the 'items' table, ensuring they are authenticated.",
+      "area": "Backend",
+      "status": "To Do",
+      "assignedTo": null
+    },
+    {
+      "title": "API: Implement paginated GET endpoint for Items list",
+      "description": "Implement the GET /items endpoint to retrieve a list of items for the authenticated user, with support for pagination to handle large datasets efficiently.",
+      "area": "Backend",
+      "status": "To Do",
+      "assignedTo": null
+    },
+    {
+      "title": "API: Implement thumbnail upload to GCP",
+      "description": "Create an endpoint that accepts multipart/form-data. This endpoint will handle uploading the image file to Google Cloud Platform storage and creating a corresponding record in the 'assets' table.",
+      "area": "Backend",
+      "status": "To Do",
+      "assignedTo": null
+    },
+    {
+      "title": "API: Implement thumbnail update/delete cleanup logic",
+      "description": "When an item's thumbnail is updated or an item is deleted, ensure the old asset file is removed from GCP storage and its corresponding row is deleted from the 'assets' table to prevent orphaned files.",
+      "area": "Backend",
+      "status": "To Do",
+      "assignedTo": null
+    },
+    {
+      "title": "Setup: Integrate Sonner for toast notifications",
+      "description": "Add the Sonner library to the frontend project and configure a global toast provider to handle user feedback for API actions.",
+      "area": "Frontend",
+      "status": "To Do",
+      "assignedTo": null
+    },
+    {
+      "title": "UI: Create the main 'Items' page and display logic",
+      "description": "Build the main items dashboard page. Implement the logic to fetch items on load, handle loading states, and use Sonner to display any errors.",
+      "area": "Frontend",
+      "status": "To Do",
+      "assignedTo": null
+    },
+    {
+      "title": "UI: Display items in a card format",
+      "description": "Render the fetched items as a grid of cards. Each card should display the item's thumbnail, name, and a clamped description.",
+      "area": "Frontend",
+      "status": "To Do",
+      "assignedTo": null
+    },
+    {
+      "title": "UI: Create 'Add/Edit Item' modal",
+      "description": "Develop a reusable modal component for both adding and editing items. It should contain form fields for name, description, and a file input for the thumbnail.",
+      "area": "Frontend",
+      "status": "To Do",
+      "assignedTo": null
+    },
+    {
+      "title": "UX: Add pre-selected item examples to modal",
+      "description": "Enhance the 'Add Item' modal by including a feature that allows users to quickly select from a list of common venue items like 'chairs' or 'tables'.",
+      "area": "Frontend",
+      "status": "To Do",
+      "assignedTo": null
+    },
+    {
+      "title": "Logic: Implement 'Create Item' functionality",
+      "description": "Connect the 'Add Item' modal to the create API endpoint. The request should use multipart/form-data to send the thumbnail. Show success/error toasts upon completion.",
+      "area": "Frontend",
+      "status": "To Do",
+      "assignedTo": null
+    },
+    {
+      "title": "Logic: Implement 'Update & Delete Item' functionality",
+      "description": "Enable editing by having item cards open the modal. Wire up the form to the update endpoint and add a delete button that calls the delete endpoint. Show toasts for both actions.",
+      "area": "Frontend",
+      "status": "To Do",
+      "assignedTo": null
     }
   ]
 }
