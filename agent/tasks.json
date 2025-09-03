@@ -10,15 +10,15 @@
     {
       "title": "[OPS] Enable Clerk Organizations & Roles",
       "description": "Enable Organizations in Clerk Dashboard, create roles (`admin`, `member`), configure JWT/session claims.",
-      "assignee": "",
-      "status": "todo",
+      "assignee": "Hashim",
+      "status": "done",
       "type": "ops"
     },
     {
       "title": "[OPS] Configure Clerk keys per environment",
       "description": "Set Clerk publishable/secret keys in env vars, enable Email/Password sign-in.",
-      "assignee": "",
-      "status": "todo",
+      "assignee": "Hashim",
+      "status": "done",
       "type": "ops"
     },
     {
@@ -32,7 +32,7 @@
       "title": "[FE] Auth screens via Clerk",
       "description": "Implement login, register, and forgot password flows using Clerk UI components.",
       "assignee": "",
-      "status": "todo",
+      "status": "done",
       "type": "frontend"
     },
     {

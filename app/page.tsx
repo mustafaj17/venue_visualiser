@@ -11,9 +11,23 @@ export const dynamic = "force-dynamic";
 export default function Home() {
   return (
     <main className='relative flex min-h-screen flex-col items-center justify-center'>
+      <div className='absolute top-4 left-4 flex items-center space-x-3'>
+        <h2 className='text-lg md:text-xl font-semibold text-gray-800'>
+          Venue Visualiser
+        </h2>
+        <Link href='/dashboard'>
+          <button className='rounded-full bg-black text-white text-sm font-medium px-4 py-1.5 hover:bg-gray-900 active:opacity-90 transition'>
+            Go to Dashboard
+          </button>
+        </Link>
+      </div>
       <div className='absolute top-4 right-4'>
         <SignedOut>
-          <SignInButton mode='modal' />
+          <SignInButton mode='modal'>
+            <button className='rounded-full bg-white/30 shadow-sm ring-1 ring-gray-900/5 text-gray-700 text-sm font-medium px-4 py-1.5 hover:bg-white/40 hover:shadow-lg active:shadow-sm transition-all'>
+              Sign in
+            </button>
+          </SignInButton>
         </SignedOut>
         <SignedIn>
           <UserButton />
