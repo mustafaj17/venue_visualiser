@@ -39,7 +39,7 @@ export default async function TestRBACPage() {
           Admin RBAC Test
         </h1>
         <p className='mt-3 text-gray-700'>
-          You can see this because you're an admin.
+          You can see this because you&apos;re an admin.
         </p>
       </main>
     </>
