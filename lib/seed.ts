@@ -1,8 +1,12 @@
 import postgres from "postgres";
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: "prefer" });
-
 export async function seed() {
+  const url = process.env.POSTGRES_URL;
+  if (!url) {
+    throw new Error("Cannot seed without POSTGRES_URL set");
+  }
+
+  const sql = postgres(url, { ssl: "prefer" });
   // Create table with raw SQL
   const createTable = await sql`
       CREATE TABLE IF NOT EXISTS profiles (

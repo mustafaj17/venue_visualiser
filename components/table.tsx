@@ -1,4 +1,4 @@
-import { db, UsersTable } from "@/lib/drizzle";
+import { getDb, UsersTable } from "@/lib/drizzle";
 import { timeAgo } from "@/lib/utils";
 import Image from "next/image";
 import RefreshButton from "./refresh-button";
@@ -38,7 +38,12 @@ export default async function Table() {
   } else {
     let startTime = Date.now();
     try {
-      users = await db.select().from(UsersTable);
+      const db = getDb();
+      if (!db) {
+        users = MOCK_USERS;
+      } else {
+        users = await db.select().from(UsersTable);
+      }
     } catch (e: any) {
       if (e.message === `relation "profiles" does not exist`) {
         console.log(
@@ -46,7 +51,12 @@ export default async function Table() {
         );
         await seed();
         startTime = Date.now();
-        users = await db.select().from(UsersTable);
+        const db = getDb();
+        if (!db) {
+          users = MOCK_USERS;
+        } else {
+          users = await db.select().from(UsersTable);
+        }
       } else {
         throw e;
       }
