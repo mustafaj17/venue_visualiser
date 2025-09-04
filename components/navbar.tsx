@@ -1,20 +1,9 @@
 "use client";
-
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
-const OrganizationSwitcher = dynamic(
-  async () => (await import("@clerk/nextjs")).OrganizationSwitcher,
-  {
-    ssr: false,
-    loading: () => (
-      <div className='h-8 w-40 rounded-md bg-gray-200 animate-pulse' />
-    ),
-  }
-);
 
 export default function Navbar() {
   return (
@@ -25,11 +14,6 @@ export default function Navbar() {
         </Link>
         <div className='flex items-center gap-3'>
           <SignedIn>
-            <OrganizationSwitcher
-              hidePersonal={false}
-              afterSelectOrganizationUrl='/dashboard'
-              afterLeaveOrganizationUrl='/dashboard'
-            />
             <UserButton />
           </SignedIn>
           <SignedOut>
