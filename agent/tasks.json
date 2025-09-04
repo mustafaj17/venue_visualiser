@@ -3,8 +3,8 @@
     {
       "title": "[OPS] Create DB in Vercel",
       "description": "Create a new Postgres database in Vercel, link to app via env vars",
-      "assignee": "",
-      "status": "todo",
+      "assignee": "Mustafa",
+      "status": "done",
       "type": "ops"
     },
     {
