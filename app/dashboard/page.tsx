@@ -1,4 +1,5 @@
 import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import Navbar from "@/components/navbar";
 
 export const dynamic = "force-dynamic";
@@ -6,6 +7,9 @@ export const dynamic = "force-dynamic";
 export default async function DashboardPage() {
   // Load the signed-in user's basic profile for greeting
   const user = await currentUser();
+  if (!user) {
+    return redirect(`/sign-in?redirect_url=/dashboard`);
+  }
   const userName =
     user?.firstName ||
     user?.username ||
