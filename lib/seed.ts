@@ -1,8 +1,12 @@
-import postgres from 'postgres'
-
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' })
+import postgres from "postgres";
 
 export async function seed() {
+  const url = process.env.POSTGRES_URL;
+  if (!url) {
+    throw new Error("Cannot seed without POSTGRES_URL set");
+  }
+
+  const sql = postgres(url, { ssl: "prefer" });
   // Create table with raw SQL
   const createTable = await sql`
       CREATE TABLE IF NOT EXISTS profiles (
@@ -12,8 +16,8 @@ export async function seed() {
         image VARCHAR(255),
         "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
-  `
-  console.log(`Created "profiles" table`)
+  `;
+  console.log(`Created "profiles" table`);
 
   const profiles = await Promise.all([
     sql`
@@ -31,11 +35,11 @@ export async function seed() {
           VALUES ('Steven Tey', 'stey@vercel.com', 'https://images.ctfassets.net/e5382hct74si/4QEuVLNyZUg5X6X4cW4pVH/eb7cd219e21b29ae976277871cd5ca4b/profile.jpg')
           ON CONFLICT (email) DO NOTHING;
       `,
-  ])
-  console.log(`Seeded ${profiles.length} users`)
+  ]);
+  console.log(`Seeded ${profiles.length} users`);
 
   return {
     createTable,
     insertedUsers: profiles,
-  }
+  };
 }
