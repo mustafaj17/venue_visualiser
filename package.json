@@ -11,7 +11,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.31.8",
+    "@clerk/nextjs": "^6.30.0",
     "@radix-ui/react-slot": "^1.2.3",
     "@types/ms": "^0.7.32",
     "@types/node": "20.8.3",
