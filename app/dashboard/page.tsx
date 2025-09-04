@@ -2,6 +2,8 @@ import { auth } from "@clerk/nextjs/server";
 import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 import Navbar from "@/components/navbar";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -54,11 +56,15 @@ export default async function DashboardPage() {
           )}
         </div>
         <div className='mt-6'>
-          <Link href='/test'>
-            <button className='rounded-full bg-black text-white text-sm font-medium px-4 py-1.5 hover:bg-gray-900 active:opacity-90 transition'>
+          <Button
+            asChild
+            className='rounded-full bg-black text-white text-sm font-medium px-4 py-1.5 hover:bg-gray-900 active:opacity-90 transition'
+          >
+            <Link href='/test'>
               Test RBAC
-            </button>
-          </Link>
+              <ArrowRight />
+            </Link>
+          </Button>
         </div>
         <div className='mt-8 w-full border-t border-gray-200 pt-8'>
           <p className='text-gray-500'>Get started</p>

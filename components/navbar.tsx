@@ -2,6 +2,9 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 const OrganizationSwitcher = dynamic(
   async () => (await import("@clerk/nextjs")).OrganizationSwitcher,
@@ -21,11 +24,22 @@ export default function Navbar() {
           Venue Visualiser
         </Link>
         <div className='flex items-center gap-3'>
-          <OrganizationSwitcher
-            hidePersonal={false}
-            afterSelectOrganizationUrl='/dashboard'
-            afterLeaveOrganizationUrl='/dashboard'
-          />
+          <SignedIn>
+            <OrganizationSwitcher
+              hidePersonal={false}
+              afterSelectOrganizationUrl='/dashboard'
+              afterLeaveOrganizationUrl='/dashboard'
+            />
+            <UserButton />
+          </SignedIn>
+          <SignedOut>
+            <SignInButton mode='modal'>
+              <Button className='rounded-full bg-black text-white text-sm font-medium px-4 py-1.5 hover:bg-gray-900 transition'>
+                Sign in
+                <ArrowRight />
+              </Button>
+            </SignInButton>
+          </SignedOut>
         </div>
       </div>
     </nav>

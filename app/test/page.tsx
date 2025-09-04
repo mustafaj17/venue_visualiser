@@ -2,6 +2,8 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect, notFound } from "next/navigation";
 import Navbar from "@/components/navbar";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -29,11 +31,15 @@ export default async function TestRBACPage() {
       <Navbar />
       <main className='min-h-screen px-6 py-10 flex flex-col items-start mx-auto max-w-5xl'>
         <div className='mb-4'>
-          <Link href='/dashboard'>
-            <button className='rounded-full bg-black text-white text-sm font-medium px-4 py-1.5 hover:bg-gray-900 active:opacity-90 transition'>
+          <Button
+            asChild
+            className='rounded-full bg-black text-white text-sm font-medium px-4 py-1.5 hover:bg-gray-900 active:opacity-90 transition'
+          >
+            <Link href='/dashboard'>
+              <ArrowLeft />
               Go back
-            </button>
-          </Link>
+            </Link>
+          </Button>
         </div>
         <h1 className='text-3xl md:text-4xl font-semibold tracking-tight'>
           Admin RBAC Test
