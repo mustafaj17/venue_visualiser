@@ -3,72 +3,72 @@
     {
       "title": "[OPS] Create DB in Vercel",
       "description": "Create a new Postgres database in Vercel, link to app via env vars",
-      "assignee": "Mustafa",
-      "status": "done",
-      "type": "ops"
+      "area": "Ops",
+      "status": "Done",
+      "assignedTo": "Mustafa"
     },
     {
       "title": "[OPS] Enable Clerk Organizations & Roles",
       "description": "Enable Organizations in Clerk Dashboard, create roles (`admin`, `member`), configure JWT/session claims.",
-      "assignee": "Hashim",
-      "status": "deprecated",
-      "type": "ops"
+      "area": "Ops",
+      "status": "Deprecated",
+      "assignedTo": "Hashim"
     },
     {
       "title": "[OPS] Configure Clerk keys per environment",
       "description": "Set Clerk publishable/secret keys in env vars, enable Email/Password sign-in.",
-      "assignee": "Hashim",
-      "status": "todo",
-      "type": "ops"
+      "area": "Ops",
+      "status": "To Do",
+      "assignedTo": "Hashim"
     },
     {
       "title": "[BE] Auth & RBAC middleware (Clerk-only)",
       "description": "Validate Clerk session/JWT, read org role, enforce `requireAuth` and `requireAdmin`.",
-      "assignee": "Hashim",
-      "status": "deprecated",
-      "type": "backend"
+      "area": "Backend",
+      "status": "Deprecated",
+      "assignedTo": "Hashim"
     },
     {
       "title": "[FE] Auth screens via Clerk",
       "description": "Implement login, register, and forgot password flows using Clerk UI components.",
-      "assignee": "Hashim",
-      "status": "done",
-      "type": "frontend"
+      "area": "Frontend",
+      "status": "Done",
+      "assignedTo": "Hashim"
     },
     {
       "title": "[FE] Role-aware routing & layouts",
       "description": "Gate `/admin/*` with Clerk role checks, render layouts based on role.",
-      "assignee": "Hashim",
-      "status": "deprecated",
-      "type": "frontend"
+      "area": "Frontend",
+      "status": "Deprecated",
+      "assignedTo": "Hashim"
     },
     {
       "title": "[BE] Admin Users API (proxy to Clerk)",
       "description": "Endpoints to list users from Clerk and update their org roles.",
-      "assignee": "Hashim",
-      "status": "deprecated",
-      "type": "backend"
+      "area": "Backend",
+      "status": "Deprecated",
+      "assignedTo": "Hashim"
     },
     {
       "title": "[FE] Admin Dashboard: Users table",
       "description": "Admin UI showing users list, promote/demote actions via API.",
-      "assignee": "Hashim",
-      "status": "deprecated",
-      "type": "frontend"
+      "area": "Frontend",
+      "status": "Deprecated",
+      "assignedTo": "Hashim"
     },
     {
       "title": "[FE] User Profile mini-panel",
       "description": "Display email, provider, and role from Clerk session.",
-      "assignee": "Hashim",
-      "status": "done",
-      "type": "frontend"
+      "area": "Frontend",
+      "status": "Done",
+      "assignedTo": "Hashim"
     },
     {
       "title": "[OPS] Seed initial Admin in Clerk",
       "description": "Create initial Organization admin in Clerk Dashboard.",
-      "assignee": "Hashim",
-      "status": "deprecated",
-      "type": "ops"
+      "area": "Ops",
+      "status": "Deprecated",
+      "assignedTo": "Hashim"
     },
     {
       "title": "DB: Create 'items' and 'assets' tables",
@@ -82,21 +82,21 @@
       "description": "Build the RESTful API endpoints for Create, Read (a single item), Update, and Delete operations on the 'items' table, ensuring they are authenticated.",
       "area": "Backend",
       "status": "To Do",
-      "assignedTo": null
+      "assignedTo": "Hashim"
     },
     {
       "title": "API: Implement paginated GET endpoint for Items list",
       "description": "Implement the GET /items endpoint to retrieve a list of items for the authenticated user, with support for pagination to handle large datasets efficiently.",
       "area": "Backend",
       "status": "To Do",
-      "assignedTo": null
+      "assignedTo": "Hashim"
     },
     {
       "title": "API: Implement thumbnail upload to GCP",
       "description": "Create an endpoint that accepts multipart/form-data. This endpoint will handle uploading the image file to Google Cloud Platform storage and creating a corresponding record in the 'assets' table.",
       "area": "Backend",
       "status": "To Do",
-      "assignedTo": null
+      "assignedTo": "Hashim"
     },
     {
       "title": "API: Implement thumbnail update/delete cleanup logic",
