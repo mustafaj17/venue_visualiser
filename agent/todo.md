@@ -1,6 +1,6 @@
 ## Hashim's TODOs
 
-- [ ] DB: Create 'items' and 'assets' tables — Create the database tables. The 'items' table needs columns for id, name, description, and a user_id foreign key. The 'assets' table needs to link items to their thumbnail file paths in GCP.
+- [✅] DB: Create 'items' and 'assets' tables — Create the database tables. The 'items' table needs columns for id, name, description, and a user_id foreign key. The 'assets' table needs to link items to their thumbnail file paths in GCP.
 
 - [ ] API: Implement CRUD endpoints for Items — Build the RESTful API endpoints for Create, Read (a single item), Update, and Delete operations on the 'items' table, ensuring they are authenticated.
 
