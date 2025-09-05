@@ -25,8 +25,28 @@ export const UsersTable = pgTable(
   }
 );
 
+export const ItemsTable = pgTable("items", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  userId: text("userId").notNull(), // Foreign key to UsersTable
+});
+
+export const AssetsTable = pgTable("assets", {
+  id: serial("id").primaryKey(),
+  itemId: text("itemId").notNull(),
+  filePath: text("filePath").notNull(), // GCP file path
+});
+
 export type User = InferSelectModel<typeof UsersTable>;
 export type NewUser = InferInsertModel<typeof UsersTable>;
+
+export type Item = InferSelectModel<typeof ItemsTable>;
+export type NewItem = InferInsertModel<typeof ItemsTable>;
+
+export type Asset = InferSelectModel<typeof AssetsTable>;
+export type NewAsset = InferInsertModel<typeof AssetsTable>;
+
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
   throw new Error(
