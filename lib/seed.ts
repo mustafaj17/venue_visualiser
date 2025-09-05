@@ -1,10 +1,7 @@
-import { getDb, UsersTable, type NewUser } from "./drizzle";
+import { db, UsersTable, type NewUser } from "./drizzle";
 
 export async function seed() {
-  const db = getDb();
-  if (!db) {
-    throw new Error("Cannot seed without DATABASE_URL set");
-  }
+  // Database connection is initialized in drizzle.ts and will throw if misconfigured
 
   // Create table using Drizzle schema
   console.log(`Ensuring "profiles" table exists`);
