@@ -1,7 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Navbar from "@/components/navbar";
-import ApiTestingPanel from "@/components/api-testing-panel";
+import ApiTestingPanel from "@/components/dashboard/api-testing-panel";
 
 export const dynamic = "force-dynamic";
 

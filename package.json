@@ -14,11 +14,13 @@
   "dependencies": {
     "@clerk/nextjs": "^6.30.0",
     "@radix-ui/react-slot": "^1.2.3",
+    "@tanstack/react-query": "^5.87.1",
     "@types/ms": "^0.7.32",
     "@types/node": "20.8.3",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "autoprefixer": "10.4.16",
+    "axios": "^1.11.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-kit": "^0.31.4",
@@ -36,5 +38,8 @@
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.2.2"
+  },
+  "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.86.0"
   }
 }
