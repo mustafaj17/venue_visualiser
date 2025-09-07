@@ -1,3 +1,3 @@
-export async function GET(request: Request) {
-  return new Response("Hello, world!");
+export async function GET() {
+  return Response.json({ items: [{ id: 1, name: "Hello, world!" }] });
 }
