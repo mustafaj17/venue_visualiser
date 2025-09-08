@@ -1,14 +1,18 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useQuery } from "@tanstack/react-query";
-import { getItems } from "@/lib/api";
+import { useState } from "react";
+import { getItems } from "@/lib/frontend/api";
 
 export default function ApiTestingPanel() {
+  const [itemId, setItemId] = useState("");
+
   const { data, error, isPending, isError, isSuccess, refetch, isFetching } =
     useQuery({
-      queryKey: ["items"],
-      queryFn: getItems,
+      queryKey: ["items", itemId],
+      queryFn: () => getItems(itemId || undefined),
       enabled: false,
       retry: 0,
       refetchOnWindowFocus: false,
@@ -36,12 +40,20 @@ export default function ApiTestingPanel() {
 
       <div className='mt-4 grid gap-3'>
         <div className='mt-2 flex items-center gap-2'>
+          <div className='w-40'>
+            <Input
+              type='text'
+              value={itemId}
+              onChange={(e) => setItemId(e.target.value)}
+              placeholder='Enter id'
+            />
+          </div>
           <Button
             type='button'
             onClick={handleGetAllItemsClick}
             disabled={isFetching}
           >
-            {isFetching ? "Loading..." : "Get all items"}
+            {isFetching ? "Loading..." : "Get by ID"}
           </Button>
         </div>
 
