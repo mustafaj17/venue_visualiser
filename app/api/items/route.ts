@@ -4,6 +4,7 @@ import {
   DuplicateItemError,
   deleteItemById,
 } from "@/lib/server/items-helpers";
+import { idQuerySchema, createItemBodySchema } from "@/lib/server/zod-schemas";
 
 /*
 Update (PATCH) plan for /api/items
@@ -29,28 +30,19 @@ Notes:
 
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get("id");
-
-    // check if id is missing and/or trim
-    if (id === null || id.trim() === "") {
+    const params = Object.fromEntries(new URL(request.url).searchParams);
+    // Validate and coerce `?id=` from the query into a positive integer
+    const parsed = idQuerySchema.safeParse(params);
+    if (!parsed.success) {
+      // Return uniform 400 with Zod's flattened field errors
       return Response.json(
-        { ok: false, error: "Missing required 'id' query param" },
+        { ok: false, error: parsed.error.flatten() },
         { status: 400 }
       );
     }
 
-    // regex check for positive integer
-    const trimmedId = id.trim();
-    if (!/^\d+$/.test(trimmedId)) {
-      return Response.json(
-        { ok: false, error: "Invalid 'id' - must be a positive integer" },
-        { status: 400 }
-      );
-    }
-
-    // check if item exists
-    const item = await getItemById(trimmedId);
+    // Use validated id; cast to string to match helper signature
+    const item = await getItemById(String(parsed.data.id));
     if (!item) {
       return Response.json(
         { ok: false, error: "Item not found" },
@@ -68,27 +60,18 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, description, userId } = body ?? {};
-
-    // Type validation and white space removal
-    if (
-      typeof name !== "string" ||
-      typeof description !== "string" ||
-      typeof userId !== "string" ||
-      name.trim() === "" ||
-      description.trim() === "" ||
-      userId.trim() === ""
-    ) {
+    // Validate request body; trims strings and requires non-empty values
+    const parsed = createItemBodySchema.safeParse(body);
+    if (!parsed.success) {
+      // Send structured validation errors from Zod
       return Response.json(
-        {
-          ok: false,
-          error: "Missing or invalid fields: name, description, userId",
-        },
+        { ok: false, error: parsed.error.flatten() },
         { status: 400 }
       );
     }
 
-    const item = await createItem({ name, description, userId });
+    // `parsed.data` is typed and normalized according to the schema
+    const item = await createItem(parsed.data);
     return Response.json({ ok: true, item }, { status: 201 });
   } catch (error) {
     if (error instanceof DuplicateItemError) {
@@ -104,25 +87,19 @@ export async function POST(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get("id");
-
-    if (id === null || id.trim() === "") {
+    const params = Object.fromEntries(new URL(request.url).searchParams);
+    // Same query validation as GET; ensures positive integer id
+    const parsed = idQuerySchema.safeParse(params);
+    if (!parsed.success) {
+      // 400 with detailed field errors
       return Response.json(
-        { ok: false, error: "Missing required 'id' query param" },
+        { ok: false, error: parsed.error.flatten() },
         { status: 400 }
       );
     }
 
-    const trimmedId = id.trim();
-    if (!/^\d+$/.test(trimmedId)) {
-      return Response.json(
-        { ok: false, error: "Invalid 'id' - must be a positive integer" },
-        { status: 400 }
-      );
-    }
-
-    const deleted = await deleteItemById(trimmedId);
+    // Use validated id (cast to string for helper)
+    const deleted = await deleteItemById(String(parsed.data.id));
     if (!deleted) {
       return Response.json(
         { ok: false, error: "Item not found" },
