@@ -52,3 +52,17 @@ export async function createItem(params: {
 
   throw new Error("Failed to create item");
 }
+
+export async function deleteItemById(id: string): Promise<Item | null> {
+  const numericId = parseInt(id);
+  if (Number.isNaN(numericId) || numericId <= 0) {
+    throw new Error("Invalid id");
+  }
+
+  const rows = await db
+    .delete(ItemsTable)
+    .where(eq(ItemsTable.id, numericId))
+    .returning();
+
+  return rows[0] ?? null;
+}
