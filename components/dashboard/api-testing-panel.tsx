@@ -2,9 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { getItems } from "@/lib/frontend/api";
+import {
+  createItemApi,
+  getItems,
+  type CreateItemInput,
+} from "@/lib/frontend/api";
 
 export default function ApiTestingPanel() {
   const [itemId, setItemId] = useState("");
@@ -21,6 +25,20 @@ export default function ApiTestingPanel() {
 
   function handleGetAllItemsClick() {
     void refetch();
+  }
+
+  // TODO: MOVE USER ID TO SERVER
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [userId, setUserId] = useState("");
+
+  const createMutation = useMutation({
+    mutationFn: (input: CreateItemInput) => createItemApi(input),
+  });
+
+  function handleCreateSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    createMutation.mutate({ name, description, userId });
   }
 
   let responsePreview = "\n// Response will appear here\n";
@@ -56,6 +74,47 @@ export default function ApiTestingPanel() {
             {isFetching ? "Loading..." : "Get by ID"}
           </Button>
         </div>
+
+        <form
+          className='mt-6 grid max-w-md gap-3'
+          onSubmit={handleCreateSubmit}
+          noValidate
+        >
+          <h3 className='text-md font-medium'>Create item</h3>
+          <Input
+            type='text'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder='Name'
+          />
+          <Input
+            type='text'
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder='Description'
+          />
+          <Input
+            type='text'
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+            placeholder='User ID'
+          />
+          <Button type='submit' disabled={createMutation.isPending}>
+            {createMutation.isPending ? "Creating..." : "Create item"}
+          </Button>
+
+          {createMutation.isError ? (
+            <p className='text-sm text-red-600'>
+              {(createMutation.error as Error)?.message ??
+                "Failed to create item"}
+            </p>
+          ) : null}
+          {createMutation.isSuccess ? (
+            <pre className='rounded-md border border-green-200 bg-green-50 p-2 text-xs text-green-800'>
+              {JSON.stringify(createMutation.data, null, 2)}
+            </pre>
+          ) : null}
+        </form>
 
         <div className='mt-4'>
           <label

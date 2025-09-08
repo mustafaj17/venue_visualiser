@@ -6,3 +6,14 @@ export async function getItems(id?: string): Promise<any> {
   });
   return response.data;
 }
+
+export type CreateItemInput = {
+  name: string;
+  description: string;
+  userId: string;
+};
+
+export async function createItemApi(input: CreateItemInput): Promise<any> {
+  const response = await axios.post("/api/items", input);
+  return response.data;
+}
