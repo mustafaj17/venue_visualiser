@@ -25,12 +25,24 @@ export const UsersTable = pgTable(
   }
 );
 
-export const ItemsTable = pgTable("items", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  description: text("description").notNull(),
-  userId: text("userId").notNull(), // Foreign key to UsersTable
-});
+export const ItemsTable = pgTable(
+  "items",
+  {
+    id: serial("id").primaryKey(),
+    name: text("name").notNull(),
+    description: text("description").notNull(),
+    userId: text("userId").notNull(), // Foreign key to UsersTable
+  },
+  (items) => {
+    return {
+      itemsUnique: uniqueIndex("items_unique_name_description_userId").on(
+        items.name,
+        items.description,
+        items.userId
+      ),
+    };
+  }
+);
 
 export const AssetsTable = pgTable("assets", {
   id: serial("id").primaryKey(),

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { toast } from "sonner";
 import {
   createItemApi,
   getItems,
@@ -12,41 +13,97 @@ import {
 
 export default function ApiTestingPanel() {
   const [itemId, setItemId] = useState("");
+  const { refetch, isFetching } = useQuery({
+    queryKey: ["items", itemId],
+    queryFn: () => getItems(itemId || undefined),
+    enabled: false,
+    retry: 0,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
 
-  const { data, error, isPending, isError, isSuccess, refetch, isFetching } =
-    useQuery({
-      queryKey: ["items", itemId],
-      queryFn: () => getItems(itemId || undefined),
-      enabled: false,
-      retry: 0,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-    });
-
-  function handleGetAllItemsClick() {
-    void refetch();
+  async function handleGetAllItemsClick() {
+    // eslint-disable-next-line no-console
+    console.log("[GET ITEMS] fetching", { id: itemId || undefined });
+    const result = await refetch();
+    if (result.error) {
+      // eslint-disable-next-line no-console
+      console.error("[GET ITEMS] error", result.error);
+    } else {
+      // eslint-disable-next-line no-console
+      console.log("[GET ITEMS] success", result.data);
+    }
   }
 
   // TODO: MOVE USER ID TO SERVER
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [userId, setUserId] = useState("");
+  const [formError, setFormError] = useState<string | null>(null);
+  const [isInvalidSubmitLocked, setIsInvalidSubmitLocked] = useState(false);
+
+  function handleInvalidAttempt() {
+    const message =
+      "Please fill in Name, Description, and User ID before submitting.";
+    setFormError(message);
+    if (!isInvalidSubmitLocked) {
+      toast.error(message);
+      setIsInvalidSubmitLocked(true);
+      window.setTimeout(() => setIsInvalidSubmitLocked(false), 3000);
+    }
+  }
 
   const createMutation = useMutation({
     mutationFn: (input: CreateItemInput) => createItemApi(input),
+    onSuccess: (data) => {
+      // eslint-disable-next-line no-console
+      console.log("[CREATE ITEM] success", data);
+    },
+    onError: (err) => {
+      // eslint-disable-next-line no-console
+      console.error("[CREATE ITEM] error", err);
+      const anyErr = err as any;
+      const status = anyErr?.response?.status as number | undefined;
+      const serverMessage: string | undefined = anyErr?.response?.data?.error;
+
+      if (
+        status === 409 ||
+        serverMessage?.toLowerCase?.().includes("already exists")
+      ) {
+        toast.warning("Item already exists", {
+          description: "Duplicate entries are not allowed.",
+        });
+        return;
+      }
+
+      if (status === 400) {
+        toast.error(
+          serverMessage ??
+            "Invalid input. Please check the fields and try again."
+        );
+        return;
+      }
+
+      toast.error("Failed to create item", {
+        description:
+          serverMessage ??
+          (anyErr?.message as string | undefined) ??
+          "Unexpected error occurred.",
+      });
+    },
   });
 
   function handleCreateSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const isValid = Boolean(
+      name.trim().length && description.trim().length && userId.trim().length
+    );
+    if (!isValid) {
+      handleInvalidAttempt();
+      return;
+    }
+    setFormError(null);
     createMutation.mutate({ name, description, userId });
-  }
-
-  let responsePreview = "\n// Response will appear here\n";
-  if (isError) {
-    const message = error instanceof Error ? error.message : String(error);
-    responsePreview = JSON.stringify({ ok: false, error: message }, null, 2);
-  } else if (isSuccess) {
-    responsePreview = JSON.stringify({ ok: true, data }, null, 2);
   }
 
   return (
@@ -85,46 +142,87 @@ export default function ApiTestingPanel() {
             type='text'
             value={name}
             onChange={(e) => setName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const isValid = Boolean(
+                  name.trim().length &&
+                    description.trim().length &&
+                    userId.trim().length
+                );
+                if (!isValid) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleInvalidAttempt();
+                } else {
+                  setFormError(null);
+                }
+              }
+            }}
             placeholder='Name'
           />
           <Input
             type='text'
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const isValid = Boolean(
+                  name.trim().length &&
+                    description.trim().length &&
+                    userId.trim().length
+                );
+                if (!isValid) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleInvalidAttempt();
+                } else {
+                  setFormError(null);
+                }
+              }
+            }}
             placeholder='Description'
           />
           <Input
             type='text'
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const isValid = Boolean(
+                  name.trim().length &&
+                    description.trim().length &&
+                    userId.trim().length
+                );
+                if (!isValid) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleInvalidAttempt();
+                } else {
+                  setFormError(null);
+                }
+              }
+            }}
             placeholder='User ID'
           />
-          <Button type='submit' disabled={createMutation.isPending}>
+          <Button
+            type='submit'
+            disabled={
+              createMutation.isPending ||
+              (!Boolean(
+                name.trim().length &&
+                  description.trim().length &&
+                  userId.trim().length
+              ) &&
+                isInvalidSubmitLocked)
+            }
+          >
             {createMutation.isPending ? "Creating..." : "Create item"}
           </Button>
 
-          {createMutation.isError ? (
-            <p className='text-sm text-red-600'>
-              {(createMutation.error as Error)?.message ??
-                "Failed to create item"}
-            </p>
-          ) : null}
+          {/* Keep formError state to prevent off-form error flashes, but rely on toast for display */}
         </form>
 
-        <div className='mt-4'>
-          <label
-            className='text-sm font-medium text-gray-700'
-            htmlFor='response-preview'
-          >
-            Response preview
-          </label>
-          <pre
-            id='response-preview'
-            className='mt-2 h-60 overflow-auto rounded-md border border-gray-200 bg-gray-50 p-3 text-xs text-gray-800'
-          >
-            {responsePreview}
-          </pre>
-        </div>
+        {/* Response preview removed; using console logs for simplicity */}
       </div>
     </section>
   );

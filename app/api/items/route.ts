@@ -1,4 +1,8 @@
-import { createItem, getItemById } from "@/lib/server/items-helpers";
+import {
+  createItem,
+  getItemById,
+  DuplicateItemError,
+} from "@/lib/server/items-helpers";
 
 export async function GET(request: Request) {
   try {
@@ -64,6 +68,12 @@ export async function POST(request: Request) {
     const item = await createItem({ name, description, userId });
     return Response.json({ ok: true, item }, { status: 201 });
   } catch (error) {
+    if (error instanceof DuplicateItemError) {
+      return Response.json(
+        { ok: false, error: "Item already exists" },
+        { status: 409 }
+      );
+    }
     const message = error instanceof Error ? error.message : String(error);
     return Response.json({ ok: false, error: message }, { status: 500 });
   }
