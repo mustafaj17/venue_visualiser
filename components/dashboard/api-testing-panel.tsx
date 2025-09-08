@@ -109,11 +109,6 @@ export default function ApiTestingPanel() {
                 "Failed to create item"}
             </p>
           ) : null}
-          {createMutation.isSuccess ? (
-            <pre className='rounded-md border border-green-200 bg-green-50 p-2 text-xs text-green-800'>
-              {JSON.stringify(createMutation.data, null, 2)}
-            </pre>
-          ) : null}
         </form>
 
         <div className='mt-4'>

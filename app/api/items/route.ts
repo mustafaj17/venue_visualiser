@@ -1,7 +1,41 @@
-import { createItem } from "@/lib/server/items-helpers";
+import { createItem, getItemById } from "@/lib/server/items-helpers";
 
-export async function GET() {
-  return Response.json({ items: [{ id: 1, name: "Hello, world!" }] });
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    // check if id is missing and/or trim
+    if (id === null || id.trim() === "") {
+      return Response.json(
+        { ok: false, error: "Missing required 'id' query param" },
+        { status: 400 }
+      );
+    }
+
+    // regex check for positive integer
+    const trimmedId = id.trim();
+    if (!/^\d+$/.test(trimmedId)) {
+      return Response.json(
+        { ok: false, error: "Invalid 'id' - must be a positive integer" },
+        { status: 400 }
+      );
+    }
+
+    // check if item exists
+    const item = await getItemById(trimmedId);
+    if (!item) {
+      return Response.json(
+        { ok: false, error: "Item not found" },
+        { status: 404 }
+      );
+    }
+
+    return Response.json({ ok: true, item }, { status: 200 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return Response.json({ ok: false, error: message }, { status: 500 });
+  }
 }
 
 export async function POST(request: Request) {
