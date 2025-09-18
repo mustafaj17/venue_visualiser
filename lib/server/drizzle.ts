@@ -1,6 +1,7 @@
 import {
   pgTable,
   serial,
+  integer,
   text,
   timestamp,
   uniqueIndex,
@@ -9,21 +10,7 @@ import { InferSelectModel, InferInsertModel } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
-export const UsersTable = pgTable(
-  "profiles",
-  {
-    id: serial("id").primaryKey(),
-    name: text("name").notNull(),
-    email: text("email").notNull(),
-    image: text("image").notNull(),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-  },
-  (users) => {
-    return {
-      uniqueIdx: uniqueIndex("unique_idx").on(users.email),
-    };
-  }
-);
+// Profiles table removed — users are not stored in a dedicated table.
 
 export const ItemsTable = pgTable(
   "items",
@@ -31,7 +18,7 @@ export const ItemsTable = pgTable(
     id: serial("id").primaryKey(),
     name: text("name").notNull(),
     description: text("description").notNull(),
-    userId: text("userId").notNull(), // Foreign key to UsersTable
+    userId: text("userId").notNull(), // Clerk user UUID (stores Clerk-provided user id)
   },
   (items) => {
     return {
@@ -46,12 +33,15 @@ export const ItemsTable = pgTable(
 
 export const AssetsTable = pgTable("assets", {
   id: serial("id").primaryKey(),
-  itemId: text("itemId").notNull(),
+  // Store numeric item IDs to match `items.id` (serial integer).
+  // Use integer here (not serial) because this column will hold existing
+  // `items.id` values and should not create its own sequence.
+  // This enables adding a foreign-key constraint and simplifies joins.
+  itemId: integer("itemId").notNull(),
   filePath: text("filePath").notNull(), // GCP file path
 });
 
-export type User = InferSelectModel<typeof UsersTable>;
-export type NewUser = InferInsertModel<typeof UsersTable>;
+// User types removed alongside the profiles table
 
 export type Item = InferSelectModel<typeof ItemsTable>;
 export type NewItem = InferInsertModel<typeof ItemsTable>;
