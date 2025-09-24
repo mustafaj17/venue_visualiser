@@ -1,6 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Navbar from "@/components/navbar";
+import ApiTestingPanel from "@/components/dashboard/api-testing-panel";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,7 @@ export default async function DashboardPage() {
         <h1 className='text-3xl md:text-4xl font-semibold tracking-tight'>
           Welcome, {userName}
         </h1>
+        <ApiTestingPanel />
         <div className='mt-8 w-full border-t border-gray-200 pt-8'>
           <p className='text-gray-500'>Get started</p>
           <div className='mt-4 rounded-lg border border-dashed border-black h-64 w-full flex items-center justify-center text-gray-400'>
