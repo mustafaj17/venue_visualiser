@@ -14,3 +14,16 @@ export const createItemBodySchema = z
   .strict();
 
 export type CreateItemInput = z.infer<typeof createItemBodySchema>;
+
+export const updateItemBodySchema = z
+  .object({
+    name: z.string().trim().min(1).optional(),
+    description: z.string().trim().min(1).optional(),
+  })
+  .refine((obj) => Object.keys(obj).length > 0, {
+    message: "At least one field must be provided",
+    path: ["_"],
+  })
+  .strict();
+
+export type UpdateItemInput = z.infer<typeof updateItemBodySchema>;

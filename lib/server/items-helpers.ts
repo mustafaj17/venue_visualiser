@@ -66,3 +66,49 @@ export async function deleteItemById(id: string): Promise<Item | null> {
 
   return rows[0] ?? null;
 }
+
+export async function listItemsByUserId(userId: string): Promise<Item[]> {
+  const trimmedUserId = userId.trim();
+  if (!trimmedUserId) {
+    throw new Error("Invalid userId");
+  }
+
+  const rows = await db
+    .select()
+    .from(ItemsTable)
+    .where(eq(ItemsTable.userId, trimmedUserId));
+
+  return rows;
+}
+
+export async function updateItemById(
+  id: string,
+  updates: Partial<Pick<Item, "name" | "description">>
+): Promise<Item | null> {
+  const numericId = parseInt(id);
+  if (Number.isNaN(numericId) || numericId <= 0) {
+    throw new Error("Invalid id");
+  }
+
+  const normalizedUpdates: Partial<Pick<Item, "name" | "description">> = {};
+  if (typeof updates.name === "string") {
+    const trimmed = updates.name.trim();
+    if (trimmed) normalizedUpdates.name = trimmed;
+  }
+  if (typeof updates.description === "string") {
+    const trimmed = updates.description.trim();
+    if (trimmed) normalizedUpdates.description = trimmed;
+  }
+
+  if (Object.keys(normalizedUpdates).length === 0) {
+    return null; // Nothing to update
+  }
+
+  const rows = await db
+    .update(ItemsTable)
+    .set(normalizedUpdates)
+    .where(eq(ItemsTable.id, numericId))
+    .returning();
+
+  return rows[0] ?? null;
+}
