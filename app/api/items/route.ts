@@ -5,6 +5,7 @@ import {
   deleteItemById,
 } from "@/lib/server/items-helpers";
 import { idQuerySchema, createItemBodySchema } from "@/lib/server/zod-schemas";
+import { auth } from "@clerk/nextjs/server";
 
 /*
 Update (PATCH) plan for /api/items
@@ -59,6 +60,16 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const { userId } = await auth();
+    // eslint-disable-next-line no-console
+    console.log("[POST /api/items] clerk userId:", userId);
+    if (!userId) {
+      return Response.json(
+        { ok: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     // Validate request body; trims strings and requires non-empty values
     const parsed = createItemBodySchema.safeParse(body);
@@ -71,7 +82,7 @@ export async function POST(request: Request) {
     }
 
     // `parsed.data` is typed and normalized according to the schema
-    const item = await createItem(parsed.data);
+    const item = await createItem({ ...parsed.data, userId });
     return Response.json({ ok: true, item }, { status: 201 });
   } catch (error) {
     if (error instanceof DuplicateItemError) {

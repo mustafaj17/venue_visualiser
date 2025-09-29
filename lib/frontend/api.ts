@@ -10,7 +10,6 @@ export async function getItems(id?: string): Promise<any> {
 export type CreateItemInput = {
   name: string;
   description: string;
-  userId: string;
 };
 
 export async function createItemApi(input: CreateItemInput): Promise<any> {

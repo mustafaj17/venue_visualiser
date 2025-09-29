@@ -28,7 +28,7 @@ export default async function DashboardPage() {
               Furniture Inventory
             </h1>
             <p className='mt-2 text-sm text-gray-500'>
-              Manage your chairs, tables, and centerpieces
+              Manage your furniture items
             </p>
           </div>
 
