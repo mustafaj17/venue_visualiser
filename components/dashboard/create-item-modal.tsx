@@ -16,8 +16,6 @@ export default function CreateItemModal({
   open,
   onClose,
 }: CreateItemModalProps) {
-  if (!open) return null;
-
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [showErrors, setShowErrors] = React.useState(false);
@@ -74,13 +72,15 @@ export default function CreateItemModal({
     createMutation.mutate({ name: nameValue, description: descriptionValue });
   };
 
+  if (!open) return null;
+
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center'>
       <div className='absolute inset-0 bg-black/40' onClick={onClose} />
       <div className='relative z-10 w-full max-w-2xl bg-white rounded-lg shadow-lg p-6'>
         <h2 className='text-lg font-medium'>Create item</h2>
         <p className='text-sm text-gray-500 mt-1'>
-          Visual-only modal — inputs are placeholders.
+          Please fill in the required fields.
         </p>
 
         <form className='mt-4 grid gap-3' onSubmit={handleSubmit}>
