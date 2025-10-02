@@ -3,8 +3,15 @@ import {
   getItemById,
   DuplicateItemError,
   deleteItemById,
+  listItemsByUserId,
+  updateItemById,
 } from "@/lib/server/items-helpers";
-import { idQuerySchema, createItemBodySchema } from "@/lib/server/zod-schemas";
+import {
+  idQuerySchema,
+  createItemBodySchema,
+  updateItemBodySchema,
+} from "@/lib/server/zod-schemas";
+import { auth } from "@clerk/nextjs/server";
 
 /*
 Update (PATCH) plan for /api/items
@@ -31,26 +38,35 @@ Notes:
 export async function GET(request: Request) {
   try {
     const params = Object.fromEntries(new URL(request.url).searchParams);
-    // Validate and coerce `?id=` from the query into a positive integer
-    const parsed = idQuerySchema.safeParse(params);
-    if (!parsed.success) {
-      // Return uniform 400 with Zod's flattened field errors
-      return Response.json(
-        { ok: false, error: parsed.error.flatten() },
-        { status: 400 }
-      );
+    // Branch: if id provided, return single item; otherwise list current user's items
+    if (params.id !== undefined) {
+      const parsed = idQuerySchema.safeParse(params);
+      if (!parsed.success) {
+        return Response.json(
+          { ok: false, error: parsed.error.flatten() },
+          { status: 400 }
+        );
+      }
+
+      const item = await getItemById(String(parsed.data.id));
+      if (!item) {
+        return Response.json(
+          { ok: false, error: "Item not found" },
+          { status: 404 }
+        );
+      }
+      return Response.json({ ok: true, item }, { status: 200 });
     }
 
-    // Use validated id; cast to string to match helper signature
-    const item = await getItemById(String(parsed.data.id));
-    if (!item) {
+    const { userId } = await auth();
+    if (!userId) {
       return Response.json(
-        { ok: false, error: "Item not found" },
-        { status: 404 }
+        { ok: false, error: "Unauthorized" },
+        { status: 401 }
       );
     }
-
-    return Response.json({ ok: true, item }, { status: 200 });
+    const items = await listItemsByUserId(userId);
+    return Response.json({ ok: true, items }, { status: 200 });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     return Response.json({ ok: false, error: message }, { status: 500 });
@@ -59,6 +75,16 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const { userId } = await auth();
+    // eslint-disable-next-line no-console
+    console.log("[POST /api/items] clerk userId:", userId);
+    if (!userId) {
+      return Response.json(
+        { ok: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     // Validate request body; trims strings and requires non-empty values
     const parsed = createItemBodySchema.safeParse(body);
@@ -71,7 +97,7 @@ export async function POST(request: Request) {
     }
 
     // `parsed.data` is typed and normalized according to the schema
-    const item = await createItem(parsed.data);
+    const item = await createItem({ ...parsed.data, userId });
     return Response.json({ ok: true, item }, { status: 201 });
   } catch (error) {
     if (error instanceof DuplicateItemError) {
@@ -108,6 +134,45 @@ export async function DELETE(request: Request) {
     }
 
     return Response.json({ ok: true }, { status: 200 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return Response.json({ ok: false, error: message }, { status: 500 });
+  }
+}
+
+export async function PATCH(request: Request) {
+  try {
+    const params = Object.fromEntries(new URL(request.url).searchParams);
+    const parsedId = idQuerySchema.safeParse(params);
+    if (!parsedId.success) {
+      return Response.json(
+        { ok: false, error: parsedId.error.flatten() },
+        { status: 400 }
+      );
+    }
+
+    const body = await request.json();
+    const parsedBody = updateItemBodySchema.safeParse(body);
+    if (!parsedBody.success) {
+      return Response.json(
+        { ok: false, error: parsedBody.error.flatten() },
+        { status: 400 }
+      );
+    }
+
+    const updated = await updateItemById(
+      String(parsedId.data.id),
+      parsedBody.data
+    );
+
+    if (!updated) {
+      return Response.json(
+        { ok: false, error: "Item not found" },
+        { status: 404 }
+      );
+    }
+
+    return Response.json({ ok: true, item: updated }, { status: 200 });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     return Response.json({ ok: false, error: message }, { status: 500 });
