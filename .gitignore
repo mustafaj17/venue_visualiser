@@ -39,3 +39,8 @@ yarn-error.log*
 *.tsbuildinfo
 
 .vscode
+# clerk configuration (can include secrets)
+/.clerk/
+
+# GCP service account credentials
+gcp-service-account.json

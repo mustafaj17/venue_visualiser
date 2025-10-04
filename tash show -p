@@ -1,0 +1,13 @@
+[1mdiff --git a/.gitignore b/.gitignore[m
+[1mindex 6306f90..1543abd 100644[m
+[1m--- a/.gitignore[m
+[1m+++ b/.gitignore[m
+[36m@@ -38,4 +38,6 @@[m [myarn-error.log*[m
+ # typescript[m
+ *.tsbuildinfo[m
+ [m
+[31m-.vscode[m
+\ No newline at end of file[m
+[32m+[m[32m.vscode[m
+[32m+[m[32m# clerk configuration (can include secrets)[m
+[32m+[m[32m/.clerk/[m
