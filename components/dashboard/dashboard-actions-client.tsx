@@ -8,13 +8,21 @@ export default function DashboardActionsClient() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className='flex items-center gap-3'>
-      <Button variant='outline' size='sm' className='rounded-full'>
+    <div className="flex items-center gap-3">
+      <Button
+        variant="outline"
+        size="default"
+        rounded="full"
+        className="text-sm font-medium min-w-[120px]"
+      >
         Bulk Upload
       </Button>
 
       <Button
-        className='rounded-full bg-black text-white px-4 py-2'
+        variant="cta"
+        size="default"
+        rounded="full"
+        className="text-sm font-medium min-w-[120px]"
         onClick={() => setOpen(true)}
       >
         + Add Item

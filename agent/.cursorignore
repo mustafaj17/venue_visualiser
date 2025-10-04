@@ -1,0 +1,44 @@
+# Cursor ignore file
+# This controls what files Cursor AI can see and access
+
+# Environment files - allow .env.dev but keep others private
+.env
+.env.local
+.env.production
+.env.staging
+.env.test
+
+# Allow .env.dev for development
+!.env.dev
+
+# Keep sensitive files private
+gcp-service-account.json
+*.key
+*.pem
+*.p12
+
+# Node modules
+node_modules/
+
+# Build outputs
+.next/
+out/
+build/
+dist/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+

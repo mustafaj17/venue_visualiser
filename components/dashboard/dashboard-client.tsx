@@ -18,13 +18,13 @@ export default function DashboardClient() {
   });
 
   return (
-    <div className='mt-8 w-full'>
+    <div className="mt-8 w-full">
       {isLoading ? (
-        <p className='text-sm text-gray-500 mt-4'>Loading items…</p>
+        <p className="text-base text-gray-500 mt-4">Loading items…</p>
       ) : isError ? (
-        <p className='text-sm text-red-600 mt-4'>Failed to load items</p>
+        <p className="text-base text-red-600 mt-4">Failed to load items</p>
       ) : items && items.length > 0 ? (
-        <div className='mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {items.map((item) => (
             <ItemCard
               key={item.id}
@@ -35,7 +35,7 @@ export default function DashboardClient() {
           ))}
         </div>
       ) : (
-        <p className='text-sm text-gray-500 mt-4'>
+        <p className="text-base text-gray-500 mt-4">
           No items yet. Create your first item.
         </p>
       )}
@@ -45,7 +45,7 @@ export default function DashboardClient() {
 
 export function DashboardHeaderActions() {
   return (
-    <div className='pt-1'>
+    <div>
       <DashboardActionsClient />
     </div>
   );

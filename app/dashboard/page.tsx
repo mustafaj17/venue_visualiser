@@ -21,13 +21,13 @@ export default async function DashboardPage() {
   return (
     <>
       <Navbar />
-      <main className='min-h-screen px-8 py-10 flex flex-col items-start mx-auto max-w-7xl'>
-        <div className='w-full flex items-start justify-between'>
+      <main className="min-h-screen px-6 py-8 flex flex-col items-start mx-auto max-w-7xl">
+        <div className="w-full flex items-center justify-between">
           <div>
-            <h1 className='text-3xl md:text-4xl font-semibold tracking-tight'>
+            <h1 className="text-4xl font-semibold tracking-tight">
               Furniture Inventory
             </h1>
-            <p className='mt-2 text-sm text-gray-500'>
+            <p className="mt-2 text-base text-gray-600">
               Manage your furniture items
             </p>
           </div>
